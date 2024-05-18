@@ -1,0 +1,90 @@
+Table Creation and Data Insertion:
+3.1 Table Creation for 42_District_wise_crimes_committed_against_women_2001_2012.csv:
+
+sql
+
+CREATE TABLE WomenCrimes (
+    STATE_UT TEXT,
+    DISTRICT TEXT,
+    Year INTEGER,
+    Rape INTEGER,
+    Kidnapping_Abduction INTEGER
+);
+
+3.1 Inserting Records:
+
+sql
+
+
+INSERT INTO WomenCrimes
+SELECT * FROM [imported_data_table];
+
+3.4 Table Creation for 02_District_wise_crimes_committed_against_ST_2001_2012.csv:
+
+sql
+
+CREATE TABLE CrimesAgainstST (
+    STATE_UT TEXT,
+    DISTRICT TEXT,
+    Year INTEGER,
+    Rape INTEGER,
+    Kidnapping_Abduction INTEGER
+);
+
+3.4 Inserting Records:
+
+sql
+
+INSERT INTO CrimesAgainstST
+SELECT * FROM [imported_data_table];
+
+Queries:
+3.2 Highest Number of Rapes & Kidnappings:
+
+sql
+
+SELECT STATE_UT, DISTRICT, Year
+FROM WomenCrimes
+WHERE Rape = (SELECT MAX(Rape) FROM WomenCrimes)
+   OR Kidnapping_Abduction = (SELECT MAX(Kidnapping_Abduction) FROM WomenCrimes);
+
+3.3 Lowest Number of Rapes & Kidnappings:
+
+sql
+
+SELECT STATE_UT, DISTRICT, Year
+FROM WomenCrimes
+WHERE Rape = (SELECT MIN(Rape) FROM WomenCrimes)
+   OR Kidnapping_Abduction = (SELECT MIN(Kidnapping_Abduction) FROM WomenCrimes);
+
+3.5 Highest Number of Dacoity/Robbery:
+
+sql
+
+SELECT DISTRICT
+FROM CrimesAgainstST
+WHERE Dacoity_Robbery = (SELECT MAX(Dacoity_Robbery) FROM CrimesAgainstST);
+
+3.6 Lowest Number of Murders:
+
+sql
+
+SELECT STATE_UT, DISTRICT
+FROM [table_name]
+WHERE Murder = (SELECT MIN(Murder) FROM [table_name]);
+
+3.7 Number of Murders in Ascending Order:
+
+sql
+
+SELECT STATE_UT, DISTRICT, Year, Murder
+FROM [table_name]
+ORDER BY Murder ASC, Year ASC;
+
+3.8.2 District with Highest Number of Murders Year-wise:
+
+sql
+
+SELECT STATE_UT, Year, DISTRICT, MAX(Murder) AS Highest_Murder
+FROM [table_name]
+GROUP BY STATE_UT, Year;
